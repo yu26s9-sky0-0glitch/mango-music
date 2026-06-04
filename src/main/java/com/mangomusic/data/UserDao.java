@@ -31,7 +31,7 @@ public class UserDao {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
 
                 statement.setString(1, "%" + username + "%");
-                statement.setString(2, "%" + username + "%");
+                statement.setString(1, "%" + username + "%");
 
                 try (ResultSet results = statement.executeQuery()) {
                     while (results.next()) {

@@ -31,26 +31,26 @@ public class AlbumPlayDao {
 
         try {
             Connection connection = dataManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
 
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, limit);
 
-                statement.setInt(1, userId);
-                statement.setInt(2, limit);
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    long playId = results.getLong("play_id");
+                    int uid = results.getInt("user_id");
+                    int albumId = results.getInt("album_id");
+                    LocalDateTime playedAt = results.getTimestamp("played_at").toLocalDateTime();
+                    boolean completed = results.getBoolean("completed");
+                    String albumTitle = results.getString("album_title");
+                    String artistName = results.getString("artist_name");
 
-                try (ResultSet results = statement.executeQuery()) {
-                    while (results.next()) {
-                        long playId = results.getLong("play_id");
-                        int uid = results.getInt("user_id");
-                        int albumId = results.getInt("album_id");
-                        LocalDateTime playedAt = results.getTimestamp("played_at").toLocalDateTime();
-                        boolean completed = results.getBoolean("completed");
-                        String albumTitle = results.getString("album_title");
-                        String artistName = results.getString("artist_name");
-
-                        plays.add(new AlbumPlay(playId, uid, albumId, playedAt, completed, albumTitle, artistName));
-                    }
+                    plays.add(new AlbumPlay(playId, uid, albumId, playedAt, completed, albumTitle, artistName));
                 }
             }
+
+            statement.close();
 
         } catch (SQLException e) {
             System.err.println("Error getting user plays: " + e.getMessage());

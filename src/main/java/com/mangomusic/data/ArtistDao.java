@@ -31,15 +31,15 @@ public class ArtistDao {
 
                 statement.setString(1, "%" + searchTerm + "%");
 
-                try (ResultSet results = statement.executeQuery()) {
-                    while (results.next()) {
-                        int artistId = results.getInt("artist_id");
-                        String name = results.getString("name");
-                        String genre = results.getString("primary_genre");
-                        Integer formedYear = results.getObject("formed_year", Integer.class);
+                ResultSet results = statement.executeQuery();
 
-                        artists.add(new Artist(artistId, name, genre, formedYear));
-                    }
+                while (results.next()) {
+                    int artistId = results.getInt("artist_id");
+                    String name = results.getString("name");
+                    String genre = results.getString("primary_genre");
+                    Integer formedYear = results.getObject("formed_year", Integer.class);
+
+                    artists.add(new Artist(artistId, name, genre, formedYear));
                 }
             }
 
