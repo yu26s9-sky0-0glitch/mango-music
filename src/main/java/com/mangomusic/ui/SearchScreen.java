@@ -70,7 +70,7 @@ public class SearchScreen {
 
         System.out.println("\n1. Search for an artist");
         System.out.println("2. View artist's albums");
-        System.out.println("3. Look up user by username");
+        System.out.println("3. Look up user");
         System.out.println("4. View user's recent plays");
         System.out.println("5. Find albums by genre");
         System.out.println("6. Search albums by title");
@@ -133,11 +133,21 @@ public class SearchScreen {
      */
     private void lookupUser() {
         InputValidator.clearScreen();
+        //bug 3 added the ui for email lookup
         ConsoleColors.printSection("Look Up User");
+        String username= null;
+        String email = null;
+        int command = InputValidator.getIntInRange("""
+                1: Lookup by username
+                2: Lookup by Email""",1,2);
+        if (command == 1) {
+            username = InputValidator.getNonEmptyString("\nEnter username to search: ");
+        }
+        else{
+            email = InputValidator.getNonEmptyString("\nEnter email to search: ");
+        }
 
-        String username = InputValidator.getNonEmptyString("\nEnter username to search: ");
-
-        List<User> users = userDao.searchUsers(username);
+        List<User> users = userDao.searchUsers(username, email);
 
         if (users.isEmpty()) {
             ConsoleColors.printWarning("No users found matching: " + username);
