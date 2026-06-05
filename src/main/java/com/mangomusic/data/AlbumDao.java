@@ -26,10 +26,9 @@ public class AlbumDao {
                 "WHERE al.artist_id = ? " +
                 "ORDER BY al.release_year DESC";
 
-        try {
+        try (
             Connection connection = dataManager.getConnection();
-
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            PreparedStatement statement = connection.prepareStatement(query)){
 
                 statement.setInt(1, artistId);
 
@@ -39,12 +38,12 @@ public class AlbumDao {
                         int artId = results.getInt("artist_id");
                         String title = results.getString("title");
                         int releaseYear = results.getInt("release_year");
-                        String artistName = results.getString("artist");
+                        //bug 2 incorrect column name
+                        String artistName = results.getString("artist_name");
 
                         albums.add(new Album(albumId, artId, title, releaseYear, artistName));
                     }
                 }
-            }
 
         } catch (SQLException e) {
             System.err.println("Error getting albums for artist: " + e.getMessage());
