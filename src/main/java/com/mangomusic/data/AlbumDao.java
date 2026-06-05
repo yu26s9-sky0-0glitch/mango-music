@@ -103,8 +103,8 @@ public class AlbumDao {
                 try (ResultSet results = statement.executeQuery()) {
                     while (results.next()) {
                         int albumId = results.getInt("album_id");
-                        String artistIdStr = results.getString("artist_id");
-                        int artistId = Integer.parseInt(artistIdStr);
+                        //bug 6 used the right getter to prevent parsing later on
+                        int artistId = results.getInt("artist_id");
                         String title = results.getString("title");
                         int releaseYear = results.getInt("release_year");
                         String artistName = results.getString("artist_name");
